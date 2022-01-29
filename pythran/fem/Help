@@ -1,0 +1,2 @@
+# pythran/fem/Help
+pythran -fopenmp FE_model.py
