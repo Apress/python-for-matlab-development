@@ -1,0 +1,4 @@
+# cython/mb/Help
+python cython_setup.py build_ext --inplace
+python cython_setup_parfor.py build_ext --inplace
+
