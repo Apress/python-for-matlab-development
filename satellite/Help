@@ -1,0 +1,9 @@
+triangle  -pa0.8       satellite.poly
+triangle -rpq34a0.2    satellite.1
+triangle -rpq34a0.1    satellite.2
+triangle -rpq34a0.05   satellite.3
+triangle -rpq34a0.02   satellite.4
+triangle -rpq34a0.015  satellite.5
+triangle -rpq34a0.005  satellite.6
+triangle -rpq34a0.004  satellite.7
+
