@@ -34,8 +34,8 @@ main()
 function [i]=nIter(c, imax)
   z = complex(0,0);
   for i = 0:imax-1
-    z = z*z + c;
-    if abs(z) > 2
+    z = z.^2 + c;
+    if (real(z).^2 + imag(z).^2) > 4
         break
     end
   end
