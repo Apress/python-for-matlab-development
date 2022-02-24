@@ -1,4 +1,12 @@
 % Convert a MATLAB variable to an equivalent Python-native variable.
+% py_var = mat2py(mat_var);
+% py_var = mat2py(mat_var, 'bytes');  % char mapped to Python bytes
+% py_var = mat2py(mat_var, 'string'); % char mapped to Python string
+function [x_py] = mat2py(x_mat, char_to)
+    arguments
+        x_mat
+        char_to = 'string';
+    end
 
 % {{{ code/matlab_py/mat2py.m
 % This code accompanies the book _Python for MATLAB Development:
@@ -28,7 +36,6 @@
 % FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 % DEALINGS IN THE SOFTWARE.
 % }}}
-function [x_py] = mat2py(x_mat)
 
     Im = @py.importlib.import_module;    
     np = Im('numpy');
@@ -38,7 +45,11 @@ function [x_py] = mat2py(x_mat)
     x_py = np.array({});
     switch class(x_mat)
         case 'char'
-            x_py = py.bytes(x_mat,'ASCII');
+            if strcmp(char_to,'bytes')
+                x_py = py.bytes(x_mat,'ASCII');
+            else
+                x_py = py.str(x_mat);
+            end
         case 'string'
             x_py = py.str(x_mat);
         case 'datetime'
@@ -71,11 +82,18 @@ function [x_py] = mat2py(x_mat)
                 V_IJ    = py.tuple({py_vals, py_IJ});
                 x_py = sp.coo_matrix(V_IJ,py_dims);
             elseif ismatrix(x_mat)
-                if isreal(x_mat)
+                if numel(x_mat) == 1
+                    x_py = x_mat;  % scalar numeric value
+                elseif isreal(x_mat)
                     x_py = np.array(x_mat);
                 else
                     x_py = np.array(real(x_mat)) + 1j*np.array(imag(x_mat));
                 end
+            end
+        case 'cell'
+            x_py = py.list();
+            for i = numel(x_mat)
+                x_py.append(mat2py(x_mat{i}, char_to));
             end
         otherwise
             fprintf('mat2py:  %s conversion is not implemented\n', class(x_mat))
