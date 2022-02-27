@@ -90,10 +90,22 @@ function [x_py] = mat2py(x_mat, char_to)
                     x_py = np.array(real(x_mat)) + 1j*np.array(imag(x_mat));
                 end
             end
+        case 'logical'
+            if x_mat
+                x_py = py.True;
+            else
+                x_py = py.False;
+            end
         case 'cell'
             x_py = py.list();
-            for i = numel(x_mat)
+            for i = 1:numel(x_mat)
                 x_py.append(mat2py(x_mat{i}, char_to));
+            end
+        case 'struct'
+            x_py = py.dict();
+            F = fieldnames(x_mat);
+            for i = 1:length(F)
+                x_py.update(pyargs(F{i}, mat2py(x_mat.(F{i}))));
             end
         otherwise
             fprintf('mat2py:  %s conversion is not implemented\n', class(x_mat))
