@@ -1,0 +1,7 @@
+# optim_config.yaml
+max_iter : 1000
+newmark :
+  alpha : 0.25
+  beta : 0.5 
+input_dir : "/xfer/sim_data/2022/05/17"
+tune_coeff : [1.2e-4, -3.25, 58.2]
