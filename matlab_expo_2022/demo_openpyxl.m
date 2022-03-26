@@ -45,10 +45,10 @@ pets = {{"Nutmeg", "Rabbit", 2.5},...
 for P = pets
   row = row + 1;
   for j = 1:length(category)
-    nextCell = cell(sheet,row,col+j);
+    nextCell = sheet.cell(row,col+j);
     nextCell.value = P{1}{j};
     if j == 3 && P{1}{j} < 0.1
-      nextCell = cell(sheet,row,col+j);
+      nextCell = sheet.cell(row,col+j);
       nextCell.font = ft_red;
     end
   end
