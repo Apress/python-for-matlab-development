@@ -105,7 +105,13 @@ function [x_py] = mat2py(x_mat, char_to)
             x_py = py.dict();
             F = fieldnames(x_mat);
             for i = 1:length(F)
-                x_py.update(pyargs(F{i}, mat2py(x_mat.(F{i}))));
+                if length(x_mat) == 1
+                    x_py.update(pyargs(F{i}, mat2py(x_mat.(F{i}))));
+                else
+                    for j = 1:length(x_mat)
+                        x_py.update(pyargs(F{i}, mat2py(x_mat(j))));
+                    end
+                end
             end
         otherwise
             fprintf('mat2py:  %s conversion is not implemented\n', class(x_mat))
