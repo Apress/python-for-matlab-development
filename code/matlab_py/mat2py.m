@@ -104,12 +104,25 @@ function [x_py] = mat2py(x_mat, char_to)
         case 'struct'
             x_py = py.dict();
             F = fieldnames(x_mat);
-            for i = 1:length(F)
-                if length(x_mat) == 1
-                    x_py.update(pyargs(F{i}, mat2py(x_mat.(F{i}))));
-                else
-                    for j = 1:length(x_mat)
-                        x_py.update(pyargs(F{i}, mat2py(x_mat(j))));
+            if (length(x_mat) > 1) && ...
+               (class(x_mat) == "struct")
+                % struct array
+                x_py = py.list();
+                for j = 1:length(x_mat)
+                    x_py.append( mat2py(x_mat(j)) );
+                end
+            else
+                for i = 1:length(F)
+                    if (length(x_mat.(F{i})) > 1) && ...
+                       (class(x_mat.(F{i})) == "struct")
+                        % struct of struct array
+                        List = py.list();
+                        for j = 1:length(x_mat.(F{i}))
+                            List.append( mat2py(x_mat.(F{i})(j)) );
+                        end
+                        x_py.update(pyargs(F{i}, List));
+                    else
+                        x_py.update(pyargs(F{i}, mat2py(x_mat.(F{i}))));
                     end
                 end
             end
