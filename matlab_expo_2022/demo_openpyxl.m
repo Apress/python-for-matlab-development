@@ -1,7 +1,6 @@
 % Al Danial, David Garrison
-Im = @py.importlib.import_module;
-OP = Im("openpyxl");
-styles = Im("openpyxl.styles");
+OP = imp("openpyxl");
+styles = imp("openpyxl.styles");
 Font = styles.Font;
 Alignment = styles.Alignment;
 PatternFill = styles.PatternFill;
