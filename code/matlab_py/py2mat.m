@@ -167,6 +167,9 @@ function [x_mat] = py2mat(x_py)
                        int64(x_py.second),...
                        int64(x_py.microsecond));
 
+    case 'logical'
+      x_mat = logical(x_py);
+
     % punt
     otherwise
       % return the original item?  nothing?
