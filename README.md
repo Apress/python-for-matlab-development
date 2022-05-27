@@ -23,7 +23,7 @@ native MATLAB variables and vice versa can be found in the ``code`` directory:
 
 Pandas dataframe to and from MATLAB table converters, conceptually
 similar to ``py2mat.m`` and ``mat2py.m``, can be found at
-Artem Lenskiy's [PythonToMatlab](https://github.com/Lenskiy/PandasToMatlab)
+Artem Lenskiy's [PandasToMatlab](https://github.com/Lenskiy/PandasToMatlab)
 project.
 
 ## Material from the MATLAB Expo 2022
