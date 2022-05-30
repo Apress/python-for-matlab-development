@@ -100,8 +100,26 @@ function [x_py] = mat2py(x_mat, char_to)
             end
         case 'cell'
             x_py = py.list();
-            for i = 1:numel(x_mat)
-                x_py.append(mat2py(x_mat{i}, char_to));
+            dims = size(x_mat);
+            if prod(dims) == max(size(x_mat))
+                % 1D cell array
+                for i = 1:numel(x_mat)
+                    x_py.append(mat2py(x_mat{i}, char_to));
+                end
+            else
+                if length(dims) > 2
+                    fprintf('mat2py:  %d-dimensional cell array conversion ' + ...
+                            'is not implemented\n', length(dims));
+                    return
+                end
+                nR = dims(1,1); nC = dims(1,2);
+                for r = 1:nR
+                    this_row = py.list();
+                    for c = 1:nC
+                      this_row.append(mat2py(x_mat{r,c}, char_to));
+                    end
+                    x_py.append(this_row);
+                end
             end
         case 'struct'
             x_py = py.dict();
