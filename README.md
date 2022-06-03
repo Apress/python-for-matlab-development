@@ -28,12 +28,12 @@ project.
 
 ## MATLAB Expo 2022
 
-I gave a presentation [Python for MATLAB Development](https://www.mathworks.com/videos/python-for-matlab-development-1653572942248.html)
-(video, 24 minutes) on May 17 at the MATLAB Expo 2022.
+I gave a presentation, [Python for MATLAB Development](https://www.mathworks.com/videos/python-for-matlab-development-1653572942248.html),
+(video, 24 minutes) on May 17 at the
+[MATLAB Expo 2022](https://www.matlabexpo.com/online/2022/proceedings.html).
 
-Slides and other files cited in the
-presentation at the [MATLAB Expo 2022](https://www.matlabexpo.com/online/2022/proceedings.html)
-can be found in https://github.com/Apress/python-for-matlab-development/tree/main/matlab_expo_2022.
+Slides and other files cited in the presentation can be found in
+https://github.com/Apress/python-for-matlab-development/tree/main/matlab_expo_2022.
 
 ## Releases
 
