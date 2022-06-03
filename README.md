@@ -26,10 +26,13 @@ similar to ``py2mat.m`` and ``mat2py.m``, can be found at
 Artem Lenskiy's [PandasToMatlab](https://github.com/Lenskiy/PandasToMatlab)
 project.
 
-## Material from the MATLAB Expo 2022
+## MATLAB Expo 2022
 
-Slides and other files cited in the "Python for MATLAB Development"
-presentation at the [MATLAB Expo 2022](https://www.matlabexpo.com/online/2022.html)
+I gave a presentation [Python for MATLAB Development](https://www.mathworks.com/videos/python-for-matlab-development-1653572942248.html)
+(video, 24 minutes) on May 17 at the MATLAB Expo 2022.
+
+Slides and other files cited in the
+presentation at the [MATLAB Expo 2022](https://www.matlabexpo.com/online/2022/proceedings.html)
 can be found in https://github.com/Apress/python-for-matlab-development/tree/main/matlab_expo_2022.
 
 ## Releases
