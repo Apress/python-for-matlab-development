@@ -45,13 +45,18 @@ function [x_mat] = py2mat(x_py)
         key_index = int64(0);
         for key = cell(py.list(x_py.keys()))
           key_index = key_index + 1;
-          v_name = string(key);
+          if class(key) == 'cell'
+            % key could be a Python number
+            v_name = string(py.str(key{1}));
+          else
+            v_name = string(key);
+          end
           if isvarname(v_name)
             x_mat.(v_name) = x_py.get(v_name);
           else
             % this key can't be used; replace it
             fixed = sprintf('K%06d_', key_index) + ...
-                    regexprep(string(key),'\W','_');
+                    regexprep(v_name,'\W','_');
             x_mat.(fixed) = x_py.get(v_name);
           end
         end
@@ -169,6 +174,12 @@ function [x_mat] = py2mat(x_py)
 
     case 'logical'
       x_mat = logical(x_py);
+
+    case 'py.bytes'
+      x_mat = uint8(x_py);
+
+    case 'py.NoneType'
+      x_mat = '';
 
     % punt
     otherwise
