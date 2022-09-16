@@ -1,6 +1,6 @@
 % Convert a native Python variable to an equivalent native MATLAB variable.
 
-% {{{ code/matlab_py/py2mat.m
+% {{{ code/matlab_py/py2mat.m   v 1.2  2022-09-16
 % This code accompanies the book _Python for MATLAB Development:
 % Extend MATLAB with 300,000+ Modules from the Python Package Index_ 
 % ISBN 978-1-4842-7222-0 | ISBN 978-1-4842-7223-7 (eBook)
@@ -43,7 +43,8 @@ function [x_mat] = py2mat(x_py)
         % a proper MATLAB variable name.  Go through them
         % individually
         key_index = int64(0);
-        for key = cell(py.list(x_py.keys()))
+        key_list = cell(py.list(x_py.keys()))
+        for key = key_list
           key_index = key_index + 1;
           if class(key) == 'cell'
             % key could be a Python number
@@ -52,12 +53,12 @@ function [x_mat] = py2mat(x_py)
             v_name = string(key);
           end
           if isvarname(v_name)
-            x_mat.(v_name) = x_py.get(v_name);
+            x_mat.(v_name) = x_py.get(key_list{key_index});
           else
             % this key can't be used; replace it
             fixed = sprintf('K%06d_', key_index) + ...
                     regexprep(v_name,'\W','_');
-            x_mat.(fixed) = x_py.get(v_name);
+            x_mat.(fixed) = x_py.get(key_list{key_index});
           end
         end
       end
@@ -180,6 +181,11 @@ function [x_mat] = py2mat(x_py)
 
     case 'py.NoneType'
       x_mat = '';
+
+    case 'py.scipy.optimize.optimize.OptimizeResult'
+      for k = cell(py.list(x_py.keys))
+          x_mat.(string(k{1})) = py2mat(x_py.get(k{1}));
+      end
 
     % punt
     otherwise
