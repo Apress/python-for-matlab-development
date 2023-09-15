@@ -10,13 +10,16 @@ function [x_py] = mat2py(x_mat, char_to)
 
 % {{{ code/matlab_py/mat2py.m
 % This code accompanies the book _Python for MATLAB Development:
-% Extend MATLAB with 300,000+ Modules from the Python Package Index_ 
+% Extend MATLAB with 300,000+ Modules from the Python Package Index_
 % ISBN 978-1-4842-7222-0 | ISBN 978-1-4842-7223-7 (eBook)
 % DOI 10.1007/978-1-4842-7223-7
 % https://github.com/Apress/python-for-matlab-development
-% 
-% Copyright © 2022 Albert Danial
-% 
+%
+% Copyright © 2022-2023 Albert Danial
+%
+% Contributions by:
+%   - https://github.com/hcommin (performance enhancements)
+%
 % MIT License:
 % Permission is hereby granted, free of charge, to any person obtaining a copy
 % of this software and associated documentation files (the "Software"), to deal
@@ -24,10 +27,10 @@ function [x_py] = mat2py(x_mat, char_to)
 % to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 % copies of the Software, and to permit persons to whom the Software is
 % furnished to do so, subject to the following conditions:
-% 
+%
 % The above copyright notice and this permission notice shall be included in
 % all copies or substantial portions of the Software.
-% 
+%
 % THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 % IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 % FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
@@ -37,12 +40,7 @@ function [x_py] = mat2py(x_mat, char_to)
 % DEALINGS IN THE SOFTWARE.
 % }}}
 
-    Im = @py.importlib.import_module;    
-    np = Im('numpy');
-    sp = Im('scipy.sparse');
-    dt = Im('datetime');
-    tz = Im('dateutil.tz');
-    x_py = np.array({});
+    x_py = py.numpy.array({});
     switch class(x_mat)
         case 'char'
             if strcmp(char_to,'bytes')
@@ -54,16 +52,16 @@ function [x_py] = mat2py(x_mat, char_to)
             x_py = py.str(x_mat);
         case 'datetime'
             int_sec = int64(floor(x_mat.Second));
-            frac_sec = x_mat.Second - double(int_sec);
-            micro_sec = int64(round(1e6 * frac_sec));
+            milli_sec = x_mat.Second - double(int_sec);
+            micro_sec = int64(round(1e6 * milli_sec));
             if ~isempty(x_mat.TimeZone)
-                tzinfo = tz.gettz(x_mat.TimeZone);
+                tzinfo = py.dateutil.tz.gettz(x_mat.TimeZone);
             else
                 tzinfo = py.None;
             end
-            x_py = dt.datetime(int64(x_mat.Year), int64(x_mat.Month), ...
+            x_py = py.datetime.datetime(int64(x_mat.Year), int64(x_mat.Month), ...
                                int64(x_mat.Day) , int64(x_mat.Hour) , ...
-                               int64(x_mat.Minute), int64(x_mat.Second), ...
+                               int64(x_mat.Minute), int_sec, ...
                                micro_sec, tzinfo);
         case {'double', 'single', ...
               'uint8', 'uint16', 'uint32', 'uint64', ...
@@ -76,20 +74,20 @@ function [x_py] = mat2py(x_mat, char_to)
                 [nR,nC] = size(x_mat);
                 [i,j,vals] = find(x_mat);
                 % subtract 1 to go from 1-based to 0-based indices
-                py_I    = np.array(int64(i)-1);
-                py_J    = np.array(int64(j)-1);
+                py_I    = py.numpy.array(int64(i)-1);
+                py_J    = py.numpy.array(int64(j)-1);
                 py_vals = mat2py(vals);
                 py_dims = py.tuple({int64(nR), int64(nC)});
                 py_IJ   = py.tuple({py_I, py_J});
                 V_IJ    = py.tuple({py_vals, py_IJ});
-                x_py = sp.coo_matrix(V_IJ,py_dims);
+                x_py = py.scipy.sparse.coo_matrix(V_IJ,py_dims);
             elseif ismatrix(x_mat)
                 if numel(x_mat) == 1
                     x_py = x_mat;  % scalar numeric value
                 elseif isreal(x_mat)
-                    x_py = np.array(x_mat);
+                    x_py = py.numpy.array(x_mat);
                 else
-                    x_py = np.array(real(x_mat)) + 1j*np.array(imag(x_mat));
+                    x_py = py.numpy.array(real(x_mat)) + 1j*py.numpy.array(imag(x_mat));
                 end
             end
         case 'logical'

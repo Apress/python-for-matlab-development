@@ -1,14 +1,17 @@
 % Convert a native Python variable to an equivalent native MATLAB variable.
 
-% {{{ code/matlab_py/py2mat.m   v 1.2  2022-09-16
+% {{{ code/matlab_py/py2mat.m   v 1.3  2023-09-15
 % This code accompanies the book _Python for MATLAB Development:
-% Extend MATLAB with 300,000+ Modules from the Python Package Index_ 
+% Extend MATLAB with 300,000+ Modules from the Python Package Index_
 % ISBN 978-1-4842-7222-0 | ISBN 978-1-4842-7223-7 (eBook)
 % DOI 10.1007/978-1-4842-7223-7
 % https://github.com/Apress/python-for-matlab-development
-% 
-% Copyright © 2022 Albert Danial
-% 
+%
+% Copyright © 2022-2023 Albert Danial
+%
+% Contributions by:
+%   - https://github.com/hcommin (performance enhancements)
+%
 % MIT License:
 % Permission is hereby granted, free of charge, to any person obtaining a copy
 % of this software and associated documentation files (the "Software"), to deal
@@ -16,10 +19,10 @@
 % to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 % copies of the Software, and to permit persons to whom the Software is
 % furnished to do so, subject to the following conditions:
-% 
+%
 % The above copyright notice and this permission notice shall be included in
 % all copies or substantial portions of the Software.
-% 
+%
 % THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 % IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 % FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
@@ -29,8 +32,6 @@
 % DEALINGS IN THE SOFTWARE.
 % }}}
 function [x_mat] = py2mat(x_py)
-  Im = @py.importlib.import_module;
-  np = Im('numpy');
   switch class(x_py)
       % Python dictionaries
       case 'py.dict'
@@ -77,25 +78,27 @@ function [x_mat] = py2mat(x_py)
           x_mat = x_py.single;
         case "float16"
           % doesn't exist in matlab, upcast to float32
-          x_mat = single(x_py.astype(np.float32));
+          x_mat = single(x_py.astype('float32'));
         % only reals and logicals can be cast to arrays so
         % have to cast the rest to either single or double
         case "uint8"
-          x_mat = uint8(x_py.astype(np.float32));
+          x_mat = uint8(x_py.astype('float32'));
         case "int8"
-          x_mat = int8(x_py.astype(np.float32));
+          x_mat = int8(x_py.astype('float32'));
         case "uint16"
-          x_mat = uint16(x_py.astype(np.float32));
+          x_mat = uint16(x_py.astype('float32'));
         case "int16"
-          x_mat = int16(x_py.astype(np.float32));
+          x_mat = int16(x_py.astype('float32'));
         case "uint32"
-          x_mat = uint32(x_py.astype(np.float32));
+          x_mat = uint32(x_py.astype('float32'));
         case "int32"
-          x_mat = int32(x_py.astype(np.float32));
+          x_mat = int32(x_py.astype('float32'));
         case "uint64"
-          x_mat = uint64(x_py.astype(np.float64));
+          x_mat = uint64(x_py.astype('float64'));
         case "int64"
-          x_mat = int64(x_py.astype(np.float64));
+          x_mat = int64(x_py.astype('float64'));
+        case "bool"
+          x_mat = logical(x_py);
         % Complex types require a math operation to coerce the
         % real and imaginary components to contiguous arrays.
         % Use "+0" for minimal performance impact.  Without this,
@@ -171,7 +174,7 @@ function [x_mat] = py2mat(x_py)
                        int64(x_py.hour),  ...
                        int64(x_py.minute),...
                        int64(x_py.second),...
-                       int64(x_py.microsecond));
+                       int64(x_py.microsecond/1000.0));
 
     case 'logical'
       x_mat = logical(x_py);
