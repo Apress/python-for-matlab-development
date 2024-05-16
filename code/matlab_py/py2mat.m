@@ -191,7 +191,7 @@ function [x_mat] = py2mat(x_py)
     otherwise
       % return the original item?  nothing?
       fprintf('py2mat: type "%s" not recognized\n', ...
-              string(x_py.dtype.name));
+              string(class(x_py)));
       x_mat = [];
   end
 end
