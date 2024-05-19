@@ -52,8 +52,8 @@ function [x_py] = mat2py(x_mat, char_to)
             x_py = py.str(x_mat);
         case 'datetime'
             int_sec = int64(floor(x_mat.Second));
-            milli_sec = x_mat.Second - double(int_sec);
-            micro_sec = int64(round(1e6 * milli_sec));
+            frac_sec = x_mat.Second - double(int_sec);
+            micro_sec = int64(round(1e6 * frac_sec));
             if ~isempty(x_mat.TimeZone)
                 tzinfo = py.dateutil.tz.gettz(x_mat.TimeZone);
             else

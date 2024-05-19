@@ -33,6 +33,10 @@
 % }}}
 function [x_mat] = py2mat(x_py)
   switch class(x_py)
+      % MATLAB types
+      case {'logical', 'double', 'datetime'}
+        x_mat = x_py;
+      
       % Python dictionaries
       case 'py.dict'
       try
@@ -163,10 +167,6 @@ function [x_mat] = py2mat(x_py)
     case 'py.int'
       x_mat = x_py.int64;
 
-    % Python floats (float64) -- same as matlab double
-    case 'double'
-      x_mat = x_py;
-
     case 'py.datetime.datetime'
       x_mat = datetime(int64(x_py.year),  ...
                        int64(x_py.month), ...
@@ -174,10 +174,7 @@ function [x_mat] = py2mat(x_py)
                        int64(x_py.hour),  ...
                        int64(x_py.minute),...
                        int64(x_py.second),...
-                       int64(x_py.microsecond/1000.0));
-
-    case 'logical'
-      x_mat = logical(x_py);
+                       double(x_py.microsecond)/1000.0);
 
     case 'py.bytes'
       x_mat = uint8(x_py);
@@ -194,7 +191,7 @@ function [x_mat] = py2mat(x_py)
     otherwise
       % return the original item?  nothing?
       fprintf('py2mat: type "%s" not recognized\n', ...
-              string(x_py.dtype.name));
+              string(class(x_py)));
       x_mat = [];
   end
 end
