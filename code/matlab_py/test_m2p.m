@@ -1,3 +1,4 @@
+
 % A. Danial 2023-09-15
 % Test mat2py() conversions via circular trip to py2mat().
 T = py.importlib.import_module('test_p2m');
@@ -58,6 +59,12 @@ ref_R = reshape(-12.5:2.1:12.5, 4,3)'; % default type is double
 R = py2mat(mat2py(ref_R)); 
 assert( max(abs(R - ref_R), [], 'all') < 8.0e-15, 'double matrix')
 fprintf('double matrix.............PASS\n')
+
+ref_R = reshape(-12.5:1.05:12.5, 4,3,2); % 4 x 3 x 2 double
+py_R  = py.numpy.array(ref_R);
+R = py2mat(mat2py(ref_R));
+assert( max(abs(R - ref_R), [], 'all') < 8.0e-15, 'double matrix')
+fprintf('double matrix 3D..........PASS\n')
 
 ref_R =   single(reshape(-12.5:2.1:12.5, 4,3)') - ...
         j*single(reshape(-12.5:2.1:12.5, 4,3)');

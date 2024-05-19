@@ -81,7 +81,7 @@ function [x_py] = mat2py(x_mat, char_to)
                 py_IJ   = py.tuple({py_I, py_J});
                 V_IJ    = py.tuple({py_vals, py_IJ});
                 x_py = py.scipy.sparse.coo_matrix(V_IJ,py_dims);
-            elseif ismatrix(x_mat)
+            else
                 if numel(x_mat) == 1
                     x_py = x_mat;  % scalar numeric value
                 elseif isreal(x_mat)
