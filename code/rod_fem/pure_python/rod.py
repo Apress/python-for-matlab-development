@@ -101,9 +101,9 @@ def main():
     Rods.append( Rod_Elem('BC', p_b, p_c, R, E, rho) )
     Rods.append( Rod_Elem('CA', p_c, p_a, R, E, rho) )
 
-    ind_ab = np.array([0, 1, 2, 3      ], dtype=np.int)
-    ind_bc = np.array([      2, 3, 4, 5], dtype=np.int)
-    ind_ca = np.array([0, 1,       4, 5], dtype=np.int)
+    ind_ab = np.array([0, 1, 2, 3      ], dtype=np.int32)
+    ind_bc = np.array([      2, 3, 4, 5], dtype=np.int32)
+    ind_ca = np.array([0, 1,       4, 5], dtype=np.int32)
 
     global_K = np.zeros((6,6))
     global_M = np.zeros(6)

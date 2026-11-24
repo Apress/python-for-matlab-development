@@ -36,6 +36,7 @@ import cartopy.crs as ccrs
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 
 os.environ["CARTOPY_USER_BACKGROUNDS"] = "cartopy/background"
+# https://www.ncei.noaa.gov/data/sea-surface-temperature-optimum-interpolation/v2.1/access/avhrr/201901/oisst-avhrr-v02r01.20190101.nc
 File = 'oisst-avhrr-v02r01.20190101.nc'
 rg = Dataset(File, 'r')
 lat = rg["lat"][:]
@@ -43,7 +44,7 @@ lon = rg["lon"][:]
 sst_ds = rg["sst"][0][0]
 sst = sst_ds.data
 mask = sst_ds.mask
-sst[mask] = np.NaN
+sst[mask] = np.nan
 fig = plt.figure()
 Ortho = ccrs.Orthographic(-10, 15)
 PC = ccrs.PlateCarree()

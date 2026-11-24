@@ -96,7 +96,7 @@ def animate(i):
         history_y.clear()
     history_x.append(pos[i,0])
     history_y.append(pos[i,1])
-    point.set_data(pos[i,0], pos[i,1])
+    point.set_data([pos[i,0]], [pos[i,1]])
     trace.set_data(history_x, history_y)
     return point, trace
 
