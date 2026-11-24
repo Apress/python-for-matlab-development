@@ -44,7 +44,7 @@ def load_node_file(File): # {{{
     Reads a triangle .node file.  First line is
       nPts 2 0 0
     followed by nPts lines having
-      id  X  Y  \d
+      id  X  Y  digit
     (the last digit is ignored)
     Returns a list of (x,y) pairs.
     The id is ignored because entries appear

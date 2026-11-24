@@ -28,9 +28,8 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 # }}}
-from distutils.core import setup
-from distutils.extension import Extension
-from Cython.Distutils import build_ext
+from setuptools import setup, Extension
+from Cython.Build import cythonize
 
 ext_modules=[
     Extension("rod",            ["rod.pyx"]),
@@ -40,8 +39,7 @@ ext_modules=[
 
 setup(
   name = 'fem',
-  cmdclass = {'build_ext': build_ext},
-  ext_modules = ext_modules,
+  ext_modules = cythonize(ext_modules, language_level=3),
 )
 
 # python setup.py build_ext --inplace
