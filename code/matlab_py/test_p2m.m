@@ -12,7 +12,7 @@ py_f64_array   = T.f64_array();
 py_c64_array   = T.c64_array();
 py_c128_array  = T.c128_array();
 
-MAR1 = datetime(2022,3,1,12,13,14.654);
+MAR1 = datetime(2022,3,1,12,13,14,654.321);
 
 ref_R = {12, "three", 4.4, MAR1 };
 R = py2mat(py_tuple);

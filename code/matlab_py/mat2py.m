@@ -52,8 +52,8 @@ function [x_py] = mat2py(x_mat, char_to)
             x_py = py.str(x_mat);
         case 'datetime'
             int_sec = int64(floor(x_mat.Second));
-            milli_sec = x_mat.Second - double(int_sec);
-            micro_sec = int64(round(1e6 * milli_sec));
+            frac_sec = x_mat.Second - double(int_sec);
+            micro_sec = int64(round(1e6 * frac_sec));
             if ~isempty(x_mat.TimeZone)
                 tzinfo = py.dateutil.tz.gettz(x_mat.TimeZone);
             else
@@ -81,7 +81,7 @@ function [x_py] = mat2py(x_mat, char_to)
                 py_IJ   = py.tuple({py_I, py_J});
                 V_IJ    = py.tuple({py_vals, py_IJ});
                 x_py = py.scipy.sparse.coo_matrix(V_IJ,py_dims);
-            elseif ismatrix(x_mat)
+            else
                 if numel(x_mat) == 1
                     x_py = x_mat;  % scalar numeric value
                 elseif isreal(x_mat)

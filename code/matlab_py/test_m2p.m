@@ -1,3 +1,4 @@
+
 % A. Danial 2023-09-15
 % Test mat2py() conversions via circular trip to py2mat().
 T = py.importlib.import_module('test_p2m');
@@ -12,7 +13,7 @@ py_f64_array   = T.f64_array();
 py_c64_array   = T.c64_array();
 py_c128_array  = T.c128_array();
 
-MAR1 = datetime(2022,3,1,12,13,14,654);
+MAR1 = datetime(2022,3,1,12,13,14,654.321);
 
 ref_R = {12, "three", 4.4, MAR1 };
 R = py2mat(mat2py(ref_R));
@@ -59,6 +60,12 @@ R = py2mat(mat2py(ref_R));
 assert( max(abs(R - ref_R), [], 'all') < 8.0e-15, 'double matrix')
 fprintf('double matrix.............PASS\n')
 
+ref_R = reshape(-12.5:1.05:12.5, 4,3,2); % 4 x 3 x 2 double
+py_R  = py.numpy.array(ref_R);
+R = py2mat(mat2py(ref_R));
+assert( max(abs(R - ref_R), [], 'all') < 8.0e-15, 'double matrix')
+fprintf('double matrix 3D..........PASS\n')
+
 ref_R =   single(reshape(-12.5:2.1:12.5, 4,3)') - ...
         j*single(reshape(-12.5:2.1:12.5, 4,3)');
 R = py2mat(mat2py(ref_R));
@@ -84,5 +91,5 @@ for i = 1:n_iter
     x_py = mat2py(x_mat);
 end
 elapsed_s = toc;
-fprintf('%d passes of 2mat2py() of a %d array took %.3f seconds\n', ...
+fprintf('%d passes of mat2py() of a %d array took %.3f seconds\n', ...
           n_iter, n_rand, elapsed_s)
